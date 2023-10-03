@@ -3,6 +3,7 @@ use std::{
     io::{prelude::*, BufReader},
     net::{TcpListener, TcpStream},
 };
+
 fn get_headers(mut stream: TcpStream) -> Vec<String> {
     let buf_reader = BufReader::new(&mut stream);
 
