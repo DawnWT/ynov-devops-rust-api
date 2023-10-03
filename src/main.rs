@@ -52,39 +52,44 @@ fn handle_connection(mut stream: TcpStream) {
     stream.write_all(response.as_bytes()).unwrap();
 }
 
-fn get_env_value(env_property: &str) -> String {
+fn get_env_value(env_property: &str) -> Option<String> {
     let env_value = env::var(env_property);
 
     if env_value.is_ok() {
-        return env_value.unwrap();
+        return Some(env_value.unwrap());
     }
 
-    let content = fs::read_to_string("./.env").expect(
-        format!("There is no environment variables \"{env_property}\" set nor a .env file")
-            .as_str(),
-    );
+    let content = match fs::read_to_string("./.env") {
+        Ok(val) => val,
+        Err(_) => return None,
+    };
 
-    let env_file_line = content
+    let env_file_line = match content
         .split_ascii_whitespace()
         .find(|&x| x.contains(env_property))
-        .expect(
-            format!(
-                "There is no environment variables \"{env_property}\" set nor in the .env file"
-            )
-            .as_str(),
-        );
+    {
+        Some(val) => val,
+        None => return None,
+    };
 
-    let env_file_value = env_file_line.split("=").nth(1).expect(
-        format!("There is no environment variables \"{env_property}\" and it's not set in the .env file")
-            .as_str(),
-    );
+    let env_file_value = match env_file_line.split("=").nth(1) {
+        Some(val) => val,
+        None => return None,
+    };
 
-    return env_file_value.to_owned();
+    if env_file_value == "" {
+        return None;
+    }
+
+    return Some(env_file_value.to_owned());
 }
 
 fn main() {
-    let server_port = get_env_value("PING_LISTEN_PORT");
-    
+    let server_port = match get_env_value("PING_LISTEN_PORT") {
+        Some(val) => val,
+        None => "8080".to_owned(),
+    };
+
     let listener = TcpListener::bind(format!("127.0.0.1:{server_port}")).unwrap();
 
     println!("the server is running: 127.0.0.1:{server_port}");
