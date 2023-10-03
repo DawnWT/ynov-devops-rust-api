@@ -1,16 +1,16 @@
 # Rust Ping API
 
-Cette application lance un serveur http renvoyant les headers de la requete vers /ping
+This create a http server which send headers back from /ping request
 
 ## Installation
 
-- cloner le repo
-- ```cargo run```
+- clone this repo
+- `cargo run`
 
 ## Usage
 
-Le port du serveur peut etre modifié via la variables d'environnement `PING_LISTEN_PORT`, via un fichier `.env` ou les variables d'environnements
+The server port can be modified through the environment variable `PING_LISTEN_PORT` or with a `.env` file
 
-La route `/ping` renvoit les headers de la requete sous forme de JSON
+The `/ping` route send back the headers from the request as JSON
 
-Toutes autres routes renvoie un `404 NOT FOUND` vide
+All other routes send back an ampty `404 NOT FOUND`
