@@ -51,8 +51,40 @@ fn handle_connection(mut stream: TcpStream) {
     stream.write_all(response.as_bytes()).unwrap();
 }
 
+fn get_env_value(env_property: &str) -> String {
+    let env_value = env::var(env_property);
+
+    if env_value.is_ok() {
+        return env_value.unwrap();
+    }
+
+    let content = fs::read_to_string("./.env").expect(
+        format!("There is no environment variables \"{env_property}\" set nor a .env file")
+            .as_str(),
+    );
+
+    let env_file_line = content
+        .split_ascii_whitespace()
+        .find(|&x| x.contains(env_property))
+        .expect(
+            format!(
+                "There is no environment variables \"{env_property}\" set nor in the .env file"
+            )
+            .as_str(),
+        );
+
+    let env_file_value = env_file_line.split("=").nth(1).expect(
+        format!("There is no environment variables \"{env_property}\" and it's not set in the .env file")
+            .as_str(),
+    );
+
+    return env_file_value.to_owned();
+}
+
 fn main() {
-    let listener = TcpListener::bind(format!("127.0.0.1:8080")).unwrap();
+    let server_port = get_env_value("PING_LISTEN_PORT");
+    
+    let listener = TcpListener::bind(format!("127.0.0.1:{server_port}")).unwrap();
 
     println!("the server is running: 127.0.0.1:{server_port}");
 
