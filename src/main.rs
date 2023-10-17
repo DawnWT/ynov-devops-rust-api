@@ -24,6 +24,8 @@ fn handle_connection(mut stream: TcpStream) {
     let mut json_obj: String = "{".to_owned();
     let mut json_obj_len = 0;
 
+    println!("{}", http_request);
+
     if http_request == "GET /ping HTTP/1.1" {
         for header in headers {
             if header.contains(":") {
@@ -90,7 +92,7 @@ fn main() {
         None => "8080".to_owned(),
     };
 
-    let listener = TcpListener::bind(format!("127.0.0.1:{server_port}")).unwrap();
+    let listener = TcpListener::bind(format!("0.0.0.0:{server_port}")).unwrap();
 
     println!("the server is running: 127.0.0.1:{server_port}");
 
