@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  api:
+    build: 
+      context: .
+      dockerfile: better.Dockerfile
+    networks:
+      - compose_network
+    expose:
+      - 7070
+    deploy:
+      replicas: 4
+    restart: always
+    environment:
+      - PING_LISTEN_PORT=7070
+  proxy:
+    image: nginx:latest
+    environment:
+      - API_ADDRESS=api
+      - API_PORT=7070
+    ports:
+      - 8001:80
+    volumes:
+      - ./nginx.conf:/etc/nginx/templates/default.conf.template
+    networks:
+      - compose_network
+    depends_on:
+      - api
+
+networks:
+  compose_network:
+    driver: bridge
