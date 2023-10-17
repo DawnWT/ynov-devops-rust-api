@@ -4,6 +4,7 @@ use std::{
     net::{TcpListener, TcpStream},
 };
 
+
 fn get_headers(mut stream: TcpStream) -> Vec<String> {
     let buf_reader = BufReader::new(&mut stream);
 
@@ -23,10 +24,11 @@ fn handle_connection(mut stream: TcpStream) {
     let mut status_line: String = "HTTP/1.1 ".to_owned();
     let mut json_obj: String = "{".to_owned();
     let mut json_obj_len = 0;
-
-    println!("{}", http_request);
+    let hn = hostname::get();
 
     if http_request.contains("GET /ping") {
+        println!("hostname: {:?}", hn);
+        
         for header in headers {
             if header.contains(":") {
                 let property = header.split(":").nth(0).unwrap().trim();
