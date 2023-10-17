@@ -26,7 +26,7 @@ fn handle_connection(mut stream: TcpStream) {
 
     println!("{}", http_request);
 
-    if http_request == "GET /ping HTTP/1.1" {
+    if http_request.contains("GET /ping") {
         for header in headers {
             if header.contains(":") {
                 let property = header.split(":").nth(0).unwrap().trim();
