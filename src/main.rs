@@ -3,7 +3,6 @@ use std::{
     io::{prelude::*, BufReader},
     net::{TcpListener, TcpStream},
 };
-
 use gethostname::gethostname;
 
 
@@ -98,7 +97,7 @@ fn main() {
 
     let listener = TcpListener::bind(format!("0.0.0.0:{server_port}")).unwrap();
 
-    println!("the server is running: 127.0.0.1:{server_port}");
+    println!("the server is running: 0.0.0.0:{server_port}");
 
     for stream in listener.incoming() {
         let stream = stream.unwrap();

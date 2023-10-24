@@ -17,7 +17,6 @@ RUN cargo build --release
 
 FROM rust:1.72.1-alpine
 
-
 ENV APP_USER=appuser
 
 RUN addgroup -S $APP_USER \

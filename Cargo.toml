@@ -11,4 +11,3 @@ path = "src/main.rs"
 
 [dependencies]
 gethostname = "0.4.3"
-hostname = "0.3.1"
